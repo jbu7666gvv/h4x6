@@ -1,99 +1,619 @@
-WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
-
-function gradient(text, startColor, endColor)
-    local result = ""
-    local length = #text
-
-    for i = 1, length do
-        local t = (i - 1) / math.max(length - 1, 1)
-        local r = math.floor((startColor.R + (endColor.R - startColor.R) * t) * 255)
-        local g = math.floor((startColor.G + (endColor.G - startColor.G) * t) * 255)
-        local b = math.floor((startColor.B + (endColor.B - startColor.B) * t) * 255)
-
-        local char = text:sub(i, i)
-        result = result .. "<font color=\"rgb(" .. r ..", " .. g .. ", " .. b .. ")\">" .. char .. "</font>"
-    end
-
-    return result
-end
-
-local Confirmed = false
-
-WindUI:Popup({
-    Title = "欢迎使用本熊汉化",
-    Icon = "rbxassetid://112682688917044",
-    IconThemed = true,
-    Content = "This is an Example UI for the " .. gradient("WindUI", Color3.fromHex("#00FF87"), Color3.fromHex("#60EFFF")) .. " Lib",
-    Buttons = {
-        {
-            Title = "退出",
-            Callback = function() end,
-            Variant = "Secondary",
-        },
-        {
-            Title = "使用",
-            Icon = "arrow-right",
-            Callback = function() Confirmed = true end,
-            Variant = "Primary",
-        }
-    }
-})
-
-repeat wait() until Confirmed
-
-local Window = WindUI:CreateWindow({
-    Title = "本熊",
-    Icon = "rbxassetid://129260712070622",
-    IconThemed = true,
-    Author = "本熊汉化",
-    Folder = "✅✅✅",
-    Size = UDim2.fromOffset(580, 460),
-    Transparent = true,
-    Theme = "Dark",
-    User = {
-        Enabled = true,
-        Callback = function() print("clicked") end,
-        Anonymous = true
-    },
-    SideBarWidth = 200,
-    ScrollBarEnabled = true,
-    KeySystem = {
-        Key = { "1234", "5678" },
-        Note = "Example Key System. \n\nThe Key is '1234' or '5678",
-        URL = "link-to-linkvertise-or-discord-or-idk",
-        SaveKey = true,
-    },
-})
-
-Window:CreateTopbarButton("MyCustomButton1", "bird", function() print("clicked 1!") end, 990)
-Window:CreateTopbarButton("MyCustomButton3", "battery-plus", function() Window:ToggleFullscreen() end, 989)
-
-Window:EditOpenButton({
-    Title = "本熊汉化",
-    Icon = "monitor",
-    CornerRadius = UDim.new(0,16),
-    StrokeThickness = 2,
-    Color = ColorSequence.new(Color3.fromHex("FF0F7B"), Color3.fromHex("F89B29")),
-    Draggable = true,
-})
-
-local Tabs = {
-    Home = Window:Tab({ Title = "主页", Icon = "crown" }),
-    Main = Window:Tab({ Title = "99夜", Icon = "zap" }),
-    Ninja = Window:Tab({ Title = "死铁轨", Icon = "user" }),
+local Translations = {
+   --["Scripts"] = "脚本",
+    ["Main"] = "主要",
+    ["This tab is empty"] = "此选项卡为空",
+    ["Fishing"] = "钓鱼",
+    ["Bring"] = "带来",
+    ["Auto"] = "自动",
+    ["Teleport"] = "传送",
+    ["Visuals"] = "视觉效果",
+    ["Players"] = "玩家",
+    ["Settings"] = "设置",
+    ["Anonymous"] = "本熊汉化",
+    ["Kill Aura"] = "杀戮光环",
+    ["Kill Aura Targets"] = "杀戮光环目标",
+    ["All"] = "所有",
+    ["Kill Aura Range"] = "杀戮光环范围",
+    ["Kill all (No distance limit)"] = "杀戮所有（无距离限制）",
+    ["Hit Box Expander"] = "击中框扩张器",
+    ["Expand Hitbox"] = "展开碰撞箱",
+    ["Hitbox Size"] = "碰撞箱大小",
+    ["Health"] = "健康",
+    ["Auto Bandage"] = "自动使用绷带",
+    ["Heal When below"] = "血量设置",
+    ["Auto Heal Teamates (Hold Bandage)"] = "自动治疗队伍（持有绷带）",
+    ["Auto Eat"] = "自动吃",
+    ["Auto Eat Mode"] = "自动吃模式",
+    ["Select Foods"] = "选择食物",
+    ["Eat When below"] = "饥饿值设置",
+    ["Auto Fishing"] = "自动钓鱼",
+    ["Auto Cast"] = "自动钓上",
+    ["Auto Minigames"] = "自动迷你游戏",
+    ["Bigger Success Bar"] = "更大的进度条",
+    ["Fishing Settings"] = "钓鱼设置",
+    ["Mode"] = "模式",
+    ["Auto Best Spot"] = "自动更好的地方",
+    ["Tp To Key"] = "传送到钥匙",
+    ["Tp To Best Location"] = "传送到更好的地方",
+    ["TP to Food"] = "传送到食物",
+    ["Eat Near Food"] = "吃附近的食物",
+    ["Carrot"] = "胡萝卜",
+    ["Berry"] = "浆果",
+    ["Corn"] = "玉米",
+    ["Cake"] = "蛋糕",
+    ["Cooked Morsel"] = "烤熟小肉块",
+    ["Pumpkin"] = "南瓜",
+    ["Cooked Steak"] = "烤熟的牛排",
+    ["Stew"] = "炖菜",
+    ["Float"] = "浮动",
+    ["Bring Items"] = "带来物品",
+    ["Bring location"] = "带来位置",
+    ["Player"] = "玩家",
+    ["Workbench"] = "工作台",
+    ["Campfire"] = "篝火",
+    ["Max Per Item"] = "最大每件物品",
+    ["Gears"] = "齿轮",
+    ["Bring Gears"] = "带来齿轮",
+    ["Frog Key"] = "青蛙钥匙",
+    ["Bolt"] = "螺栓",
+    ["Tyre"] = "轮胎",
+    ["Sheet Metal"] = "金属板",
+    ["Old Radio"] = "旧收音机",
+    ["Broken Fan"] = "破碎的风扇",
+    ["Broken Microwave"] = "破碎的微波炉",
+    ["Washing Machine"] = "洗衣机",
+    ["Old Car Engine"] = "老汽车发动机",
+    ["UFO Scrap"] = "UFO废料",
+    ["UFO Component"] = "UFO组件",
+    ["UFO Junk"] = "UFO垃圾",
+    ["Cultist Gem"] = "邪教宝石",
+    ["Gem of the Forest"] = "森林宝石",
+    ["Gem of the Forest Fragment"] = "森林片段的宝石",
+    ["Fuel"] = "燃料",
+    ["Bring Fuel"] = "带来燃料",
+    ["Corpse"] = "尸体",
+    ["Log"] = "木头",
+    ["Sapling"] = "树苗",
+    ["Chair"] = "椅子",
+    ["Coal"] = "煤炭",
+    ["Fuel Canister"] = "燃料罐",
+    ["Oil Barrel"] = "油桶",
+    ["Ate Carrot near you."] = "在你附近吃了胡萝卜。",
+    ["Biofuel"] = "生物燃料",
+    ["Morsel"] = "小肉块",
+    ["Steak"] = "牛排",
+    ["Ribs"] = "肋骨",
+    ["Cooked Ribs"] = "烤熟的肋骨",
+    ["Meat? Sandwich"] = "肉？三明治",
+    ["Bandage"] = "绷带",
+    ["MedKit"] = "医疗包",
+    ["Chilli"] = "辣椒",
+    ["Food & Healing"] = "食物和愈合",
+    ["Bring Food & Healing"] = "带来食物和愈合",
+    ["Guns & Armor"] = "枪和盔甲",
+    ["Bring Guns & Armor"] = "带来枪和盔甲",
+    ["Morningstar"] = "晨星",
+    ["Laser Sword"] = "激光剑",
+    ["Raygun"] = "射线枪",
+    ["Chainsaw"] = "电锯",
+    ["Strong Axe"] = "强壮的斧头",
+    ["Spear"] = "矛",
+    ["Good Axe"] = "好斧头",
+    ["Revolver"] = "左轮手枪",
+    ["Rifle"] = "步枪",
+    ["Tactical Shotgun"] = "战术霰弹枪",
+    ["Revolver Ammo"] = "左轮手枪弹药",
+    ["Rifle Ammo"] = "步枪弹药",
+    ["Alien Armour"] = "外星人盔甲",
+    ["Leather Body"] = "皮革盔甲",
+    ["Iron Body"] = "铁盔甲",
+    ["Thorn Body"] = "荆棘盔甲",
+    ["Riot Shield"] = "防暴盾",
+    ["Others"] = "其他",
+    ["Bring Others"] = "带来其他",
+    ["Feather"] = "羽毛",
+    ["Sack"] = "袋子",
+    ["Seed Box"] = "种子盒",
+    ["Old Flashlight"] = "老手电筒",
+    ["Strong Flashlight"] = "强手电筒",
+    ["Bunny Foot"] = "兔子脚",
+    ["Wolf Pelt"] = "狼毛皮",
+    ["Bear Pelt"] = "熊毛皮",
+    ["Alpha Wolf Pelt"] = "阿尔法狼毛皮",
+    ["Arctic Fox Pelt"] = "北极狐毛皮",
+    ["Polar Bear Pelt"] = "北极熊毛皮",
+    ["Mammoth Tusk"] = "猛犸象牙",
+    ["Auto Rescue Kids"] = "自动救援小孩",
+    ["Select Child"] = "选择孩子",
+    ["Auto Rescue"] = "自动救援",
+    ["Auto Farm Wood"] = "自动木材农场",
+    ["Auto Farm Wood Type"] = "自动木材农场类型",
+    ["Small Tree"] = "小树",
+    ["Snowy Small Tree"] = "雪的小树",
+    ["Large Tree"] = "大树",
+    ["Number of Trees to Cut"] = "切割的树数",
+    ["Auto Farm Wood"] = "自动木材农场",
+    ["Auto Sapling - Increase Sapling Count if u Increase distance"] = "自动树苗 - 如果增加距离，增加树苗计数",
+    ["Sapling Placement Mode"] = "树苗放置模式",
+    ["On the spot"] = "原地",
+    ["Circle around the Campfire"] = "围绕篝火圈",
+    ["Square around the Campfire"] = "围绕篝火方",
+    ["Sapling Count"] = "树苗数量",
+    ["Sapling Distance"] = "树苗距离",
+    ["Auto Sapling"] = "自动树苗",
+    ["Show Blueprint"] = "显示蓝图",
+    ["Auto Campfire"] = "自动篝火",
+    ["Select Fuels"] = "选择燃料",
+    ["Auto Fuel Campfire"] = "自动给篝火补充燃料",
+    ["Start Fueling When"] = "开始加油",
+    ["Auto Collect"] = "自动收集",
+    ["AutoCollect Flowers"] = "自动拾取花",
+    ["AutoCollect Coins"] = "自动胶拾取金币",
+    ["Auto SeedPack And Time Machine"] = "自动种子和时间机器",
+    ["Open Seed Pack"] = "打开种子包",
+    ["Auto Time Machine (every Morning)"] = "自动时间机（每天早上）",
+    ["Auto Chest"] = "自动开箱",
+    ["Bring Chest item to"] = "带来开箱物品在",
+    ["Open All Chest"] = "打开所有箱子",
+    ["Auto Break Ice"] = "自动打破冰",
+    ["Break Nearest Ice"] = "打破附近的冰",
+    ["Break All Ice"] = "打破所有的冰",
+    ["Teleports"] = "传送点",
+    ["MapLoader"] = "地图加载器",
+    ["Stop Loading"] = "停止加载",
+    ["Tp To Camp"] = "传送到营地",
+    ["Bunny"] = "兔子",
+    ["Frog"] = "青蛙",
+    ["Wolf"] = "狼",
+    ["Alpha Wolf"] = "阿尔法狼",
+    ["Bear"] = "熊",
+    ["Polar Bear"] = "北极熊",
+    ["Arctic Fox"] = "北极狐",
+    ["Mammoth"] = "猛犸象",
+    ["Cultist"] = "邪教徒",
+    ["Crossbow Cultist"] = "弩教徒",
+    ["Alien"] = "外星人",
+    ["Juggernaut Cultist"] = "巨教徒",
+    ["Chest"] = "箱子",
+    ["Select Chest"] = "选择箱子",
+    ["None"] = "没有",
+    ["Chest 1 (Volcanic Chest1)"] = "箱子1(火山箱子1)",
+    ["Teleport to Chest"] = "传送到箱子",
+    ["Refresh Chest"] = "刷新箱子",
+    ["Teleport to NPC"] = "传送到NPC",
+    ["Select NPC"] = "选择NPC",
+    ["Fairy"] = "仙女",
+    [""] = "",
+    ["TP to Selected NPC"] = "传送到选择的NPC",
+    ["Caravan"] = "大篷车",
+    ["BirdWatcher"] = "观鸟者",
+    ["Pelt Trader"] = "毛皮商人",
+    ["Teleport to Child"] = "传送到孩子",
+    ["Teleport to Structure"] = "传送到结构",
+    ["Stronghold"] = "要塞",
+    ["AlienMothership"] = "外星母舰",
+    ["Select Structure"] = "选择结构",
+    ["TP to Selected Structure"] = "传送到选择的结构",
+    ["Frog Cave"] = "青蛙洞穴",
+    ["Military Base"] = "军事基地",
+    ["Ice Temple"] = "冰城堡",
+    ["Bell Tower"] = "钟楼",
+    ["Research Facility"] = "研究设施",
+    ["Anvil"] = "铁砧",
+    ["Snow Clothing Shop"] = "雪服装店",
+    ["Child Visuals"] = "孩子视觉效果",
+    ["Enable Child ESP"] = "启用孩子透视",
+    ["Gear and Fuel Visuals"] = "齿轮和燃料视觉效果",
+    ["Select Gears & Fuels"] = "选择齿轮和燃料",
+    ["Enable Gear and Fuel ESP"] = "启用齿轮和燃料透视",
+    ["Weapons and Other Items Visuals"] = "武器和其他物品视觉效果",
+    ["Select Weapons & Other Items"] = "选择武器和其他物品",
+    ["Enable Weapon and Other Items ESP"] = "启用武器和其他物品透视",
+    ["Chest Visuals"] = "箱子视觉效果",
+    ["Enable Chest ESP"] = "启用箱子透视",
+    ["FPS Boost"] = "帧率提升",
+    ["Remove Fog"] = "删除雾",
+    ["Lower Graphics"] = "较低的图形",
+    ["Full Bright"] = "全亮",
+    ["Blackscreen"] = "黑屏",
+    ["Reveal Locations"] = "揭示地点",
+    ["Player"] = "玩家",
+    ["AntiAfk"] = "防挂机",
+    ["Player Name"] = "玩家名称",
+    ["Hide Friends Names"] = "隐藏朋友姓名",
+    ["Enter name"] = "输入名字",
+    ["Movement"] = "运动",
+    ["Player Speed"] = "玩家移动速度",
+    ["Player Jump Power"] = "玩家跳跃力量",
+    ["No Clip"] = "穿墙",
+    ["Fly"] = "飞",
+    ["Fly Speed"] = "飞行速度",
+    ["Infinite Jump"] = "无限跳跃",
+    ["Idk - Helpfull"] = "不知道-有帮助的",
+    ["Instant Open Chest"] = "即时打开箱子",
+    ["Anti Void"] = "反虚空",
+    ["Feedback"] = "反馈",
+    ["Player Protection"] = "玩家保护",
+    ["Create Safe Area"] = "创造安全区域",
+    ["Tp To Safe Area When Low"] = "生命值低时传送到安全区域",
+    ["Tp To Safe Area"] = "传送到安全区域",
+    ["H4xScripts Configs"] = "H4x脚本配置",
+    ["Save and load your settings"] = "保存并加载您的设置",
+    ["Config Name"] = "配置名称",
+    ["Default"] = "预设",
+    ["Save Config"] = "保存配置",
+    ["Select Config"] = "选择配置",
+    ["Load Config"] = "加载配置",
+    ["Refresh Configs"] = "刷新配置",
+    ["Item not found/spawned yet, explore the map"] = "未找到/生成项目尚未找到，探索地图",
+    ["not spawned"] = "未生成",
+    ["Loaded"] = "加载",
+    ["Pausing kill aura. Player character not found or not holding an axe."] = "暂停杀戮光环。未找到玩家角色或角色未持有斧头。",
+    ["Resuming kill aura!"] = "恢复杀戮光环！",
+    ["Not holding an axe. Please equip one and try again."] = "没有拿一个斧头。 请装备一个并再试一次。",
+    ["No Selected Food Found"] = "没有找到选定的食物",
+    ["Unload"] = "销毁",
+    ["Yes"] = "是",
+    ["No"] = "否",
+    ["Fun"] = "娱乐",
+    ["Reveal Map"] = "揭示地图",
+    ["Search"] = "搜索",
+    ["Scorpion"] = "蝎子",
+    ["Food Choice"] = "食物选择",
+    ["Plant Stuff"] = "植物的东西",
+    ["Build Radius"] = "构建半径",
+    ["Angle Increment"] = "角度增量",
+    ["Plant/Build Limit"] = "植物/建设限制",
+    ["Misc"] = "其它",
+    ["Config"] = "配置",
+    ["Load"] = "加载",
+    ["Loads elements from config"] = "加载配置文件",
+    ["Saves elements to config"] = "保存配置",
+    ["Save"] = "保存",
+    ["Coordinates"] = "坐标",
+    ["Show Coordinates"] = "显示坐标",
+    ["Self"] = "自己",
+    ["FOV"] = "视野范围",
+    ["Automation"] = "自动化",
+    ["Bring Stuff"] = "带来物品",
+    ["Children ESP"] = "孩子们透视",
+    ["Children"] = "孩子们",
+    ["ChildrenEspColor"] = "孩子们透视颜色",
+    ["Children Items"] = "孩子们物品",
+    ["FoodHealingEspColor"] = "食物和愈合透视颜色",
+    ["GunsArmorEspColor"] = "枪和盔甲透视颜色",
+    ["Characters ESP"] = "角色透视",
+    ["Characters"] = "角色",
+    ["CharactersEspColor"] = "角色透视颜色",
+    ["Characters Items"] = "角色物品",
+    ["Local Player"] = "本地玩家",
+    ["Walk Speed"] = "步行速度",
+    ["Stop"] = "停止",
+    ["Enabled"] = "启用",
+    ["Hip Height Changer"] = "髋部高度调整器",
+    ["Entity Godmode"] = "实体无敌模式",
+    ["Ice Aura"] = "自动破冰",
+    ["Ice Aura Range"] = "自动破冰范围",
+    ["Tree Farm"] = "树木农场",
+    ["Chop Status Visualiser"] = "切换状态可视化",
+    ["Heal When Below"] = "血量低于时自动治疗",
+    ["Hitbox Expansion"] = "碰撞箱扩展",
+    ["Enable Hitbox Expansion"] = "启用碰撞箱扩展",
+    ["Hitbox Size Multiplier"] = "碰撞箱大小乘度",
+    ["Other"] = "其他",
+    ["Instant Catch Fish"] = "即时捕鱼",
+    ["Enable Highlight"] = "启用高亮",
+    ["Show Distance"] = "显示距离",
+    ["Fill Transparency"] = "填补透明度",
+    ["TP to Camp"] = "传送到营地",
+    ["Key"] = "卡密",
+    ["FPS"] = "帧率",
+    ["Silent Execution"] = "沉默的执行",
+    ["Days"] = "天",
+    ["Features"] = "功能",
+    ["OTHER TP"] = "其他传送",
+    ["Teleport Entities"] = "传送实体",
+    ["Teleport The Entities"] = "传送实体",
+    ["FrogBlue"] = "蓝青蛙",
+    ["FrogPurple"] = "紫青蛙",
+    ["Pickup All Flowers"] = "拾起所有鲜花",
+    ["Collect All Gold Stacks"] = "收集所有金币堆",
+    ["Auto Crock Pot"] = "自动炖锅",
+    ["Bring Food To Cook Pot"] = "带上食物煮锅",
+    ["Fuel Type"] = "燃料类型",
+    ["Auto Fill Campfire"] = "自动填充篝火",
+    ["Start Fueling when (Fire HP)"] = "“当(火焰生命值)时开始添柴/加燃料",
+    ["Auto Pickup Flowers"] = "自动拾取花",
+    ["Auto Collect Coin Stacks"] = "自动收集硬币堆",
+    ["Auto Open Seed Boxes"] = "自动打开种子盒",
+    ["Bring Location"] = "带来位置",
+    ["Plant Saplings in Circle"] = "种植树苗圈",
+    ["Build Log Walls in Circle"] = "在圈子中构建木头墙",
+    ["Bring Settings"] = "带来设置",
+    ["Auto Chop Tree Type"] = "自动砍树类型",
+    ["Auto Chop Trees"] = "自动砍树",
+    ["Auto Chop Trees Range"] = "自动砍树范围",
+    ["Auto Plant Saplings"] = "自动种植树苗",
+    ["Auto Eat Food"] = "自动进食",
+    ["Eat When Hunger Below"] = "饥饿值低于(某数值)时进食",
+    ["MedKit included"] = "包含医疗包",
+    ["Instant Open Chests"] = "即时开箱",
+    ["Auto TP to Camp at Night"] = "夜晚自动传送到营地",
+    ["Teleport to Fishing Hut"] = "传送至渔人小屋",
+    ["100% Fishing Success Rate"] = "100%钓鱼成功率",
+    ["Auto TP to Warm Place"] = "自动传送到温暖的地方",
+    ["Chest TP [BETAJ]"] = "箱子传送[测试版]",
+    ["Chest Dropdown"] = "箱子下拉菜单",
+    ["Teleport To Chest"] = "传送到箱子",
+    ["Refresh Chest List"] = "刷新箱子列表",
+    ["Child TP"] = "孩子传送",
+    ["Lost Child"] = "失踪的孩子",
+    ["Structure TP"] = "结构传送",
+    ["Teleport To Selected Structure"] = "传送至选定结构",
+    ["Other TP"] = "其他传送",
+    ["Teleport to Camp"] = "传送到营地",
+    ["Teleport to Cultist Generator Base"] = "传送到邪教徒基地",
+    ["Teleport to Stronghold"] = "传送到要塞",
+    ["Teleport to Stronghold Diamond Chest"] = "传送到要塞钻石宝箱",
+    ["Teleport to Caravan"] = "传送到商队",
+    ["Teleport to Fairy"] = "传送到仙女",
+    ["Teleport to Anvil"] = "传送到铁砧",
+    ["PlayerEspColor"] = "玩家透视颜色",
+    ["Main ESP"] = "主要透视",
+    ["Fishing ESP"] = "钓鱼透视",
+    ["FishingEspColor"] = "钓鱼透视颜色",
+    ["Fishing Items"] = "钓鱼物品",
+    ["Fishing Hut"] = "钓鱼小屋",
+    ["Water Hole"] = "水坑",
+    ["Water Hole Big"] = "大水坑",
+    ["Water Hole1"] = "水坑1",
+    ["Gears ESP"] = "齿轮透视",
+    ["GearsEspColor"] = "齿轮透视颜色",
+    ["Gears Items"] = "齿轮物品",
+    ["Fuel ESP"] = "燃料透视",
+    ["Fuel Items"] = "燃料物品",
+    ["FuelEspColor"] = "燃料透视颜色",
+    ["Food & Healing ESP"] = "食物和治疗透视",
+    ["Food & Healing Items"] = "食物和治疗物品",
+    ["Guns & Armor ESP"] = "枪和盔甲透视",
+    ["Guns & Armor Items"] = "枪和盔甲物品",
+    ["Others ESP"] = "其他透视",
+    ["OthersEspColor"] = "其他透视颜色",
+    ["Others Items"] = "其他物品",
+    ["ESP Settings"] = "透视设置",
+    ["Outline Transparency"] = "轮廓透明度",
+    ["Text Size"] = "文字大小",
+    ["Speed"] = "速度",
+    ["TP Walk Speed"] = "传送行走速度",
+    ["TP Walk"] = "传送行走",
+    ["Noclip"] = "穿墙",
+    ["Useful Stuff"] = "有用的东西",
+    ["Fullbright"] = "全亮",
+    ["Remove Sky"] = "移除天空",
+    ["Ambient"] = "周围的",
+    ["Security"] = "安全",
+    ["Anti AFK"] = "反挂机",
+    ["Performance"] = "表现",
+    ["Low GFX"] = "低画质",
+    ["Close Window"] = "关闭窗口",
+    ["Cancel"] = "取消",
+    ["Do you want to close this window? You will not be able to open it again."] = "您要关闭此窗口吗？您将无法再次打开它。",
+    ["Teleport To Child"] = "传送孩子",
+    ["Refresh Children List"] = "刷新孩子列表",
+    ["Chest TP [BETA]"] = "宝箱传送[测试版]",
+    ["Ice Axe"] = "冰斧",
+    ["Ice Sword"] = "冰剑",
+    ["Aesthetic Lighting"] = "美学照明",
+    ["Enable Lighting Theme"] = "启用灯光主题",
+    ["Member Count"] = "人员数量",
+    ["Online Count"] = "在线人数",
+    ["Make sure to join our discord"] = "请务必加入我们的 Discord",
+    ["server for updates!"] = "服务器更新！",
+    ["Hitboxes restored to original size"] = "命中框恢复至原始大小",
+    ["Big Tree"] = "大树",
+    [" teleport to camp"] = "传送至营地",
+    ["Hitboxes expanded by"] = "命中框扩大",
+    ["Successfully revealed all places on the map"] = "成功显示地图上的所有地点✔",
+    ["Please equip your sack before using this!"] = "使用前请先装备好你的袋子！",
+    ["Please equip your sack before looting chests"] = "请在抢劫箱子之前装备好你的袋子",
+    ["Process stopped by Stop button!"] = "进程被“停止”按钮停止！",
+    ["Placing 0 blueprints..."] = "放置 0 张蓝图...",
+    ["No saplings found to plant!"] = "沒有找到可以栽植的樹苗！",
+    ["No Low Wall Blueprints available!"] = "没有可用的木头墙蓝图！",
+    ["Warning this might result into lag spikes/fps drops!"] = "警告这可能会导致延迟峰值/帧数下降！",
+    ["discord.gg/H4xScripts"] = "本熊汉化",
+    ["Selected config"] = "选择的配置",
+    ["Failed to reveal map. place a map board in your camp."] = "未能显示地图。请将地图板放置在你的营地中。",
+    ["Config set to: Default"] = "配置设置为：默认",
+    ["H4xScripts"] = "H4x脚本",
+    ["Loaded config:"] = "已加载配置:",
+    ["Equip an axe to farm wood."] = "装备一把斧头来砍伐木材。",
+    ["Enter name"] = "输入名字",
+    ["Hunger is 190. Resuming agian Later."] = "饥饿值为 190。稍后再恢复。",
+    ["Loaded config: 1"] = "已加载配置:1",
+    ["H4xScript - Anti Afk"] = "H4x脚本-防挂机",
+    ["Game"] = "游戏",
+    ["Survive 99 Nights"] = "生存99夜",
+    ["Timer"] = "计时器",
+    ["Changed name to"] = "更名为",
+    ["Freemium"] = "免费增值",
+    ["Anti AFK Enabled"] = "反挂机功能已启用",
+    ["Type your feedback here..."] = "在此处输入您的反馈...",
+    ["SUBMIT FEEDBACK"] = "提交反馈",
+    ["No more items to fuel."] = "没有更多物品需要加油。",
+    ["Starting to fuel campfire..."] = "开始为篝火添燃料…",
+    ["Equid Axe to break ice blocks."] = "请手持斧头用于击碎冰块。",
+    ["No Ice block found."] = "未发现冰块。",
+    ["Hunger is low, pausing fishing to eat..."] = "饥饿感值，暂停钓鱼去吃东西…",
+    ["Hunger restored. Resuming fishing."] = "饥饿值恢复。恢复钓鱼。",
+    ["Equip Fishing Rod to Auto Cast."] = "装备钓鱼竿以自动抛竿。",
+    ["Teleporting to the best fishing spot: Hotspot"] = "传送到最好的钓鱼场所:热点",
+    ["anonymous"] = "roblox本熊",
+    ["Fire"] = "篝火",
+    ["Child"] = "孩子",
+    ["Loot Mode"] = "掠夺模式",
+    ["Simple"] = "简单的",
+    ["Safe"] = "安全的",
+    ["Loot Radius"] = "战利品范围",
+    ["Chest Delay (sec)"] = "箱子延迟（秒）",
+    ["Bring Method"] = "带来方法",
+    ["Slow"] = "慢的",
+    ["Fast"] = "快速",
+    ["Ultra Fast"] = "超快",
+    ["Sacrifice Totem"] = "牺牲图腾",
+    ["Volcano"] = "火山",
+    ["Testing Facility"] = "测试设施",
+    ["ksbenxiong"] = "本熊汉化",
+    ["asdfghjnbvcxzp"] = "本熊汉化",
+    ["Crossbow"] = "弩",
+    ["Inferno Sword"] = "地狱剑",
+    ["Blueprint"] = "蓝图",
+    ["Wildfire"] = "野火",
+    ["Loaded config: Default"] = "加载配置：默认",
+    ["Pausing kill aura. Not holding an axe."] = "暂停杀戮光环。没有拿着斧头。",
+    ["NPC not found"] = "未找到 NPC",
+    ["H4x Scripts"] = "H4x 脚本",
+    ["KoalaKid"] = "考拉小孩",
+    ["DinoKid"] = "恐龙小孩",
+    ["Sapling Distance"] = "树苗距离",
+    ["Completed opening chests."] = "完成开箱",
+    ["Enabled. Looking for chests.."] = "已启用。正在寻找宝箱……",
+    ["Close"] = "关闭",
+    ["Are you sure you want to unload the interface?"] = "您确定要卸载该接口吗？",
+    ["H4xScript"] = "H4x脚本",
+    ["99 Nights in the Forest"] = "森林里的99个夜晚",
+    ["Join Discord"] = "加入 Discord",
+    ["Join our Discord server! For Lootlink to Skip 1h cooldown"] = "加入我们的Discord服务器！Lootlink可跳过1小时冷却时间",
+    ["Get a permanent key for cheap in discord!"] = "在 discord 中以便宜的价格获取永久密钥！",
+    ["Paste 32-character key here"] = "在此处粘贴 32 个字符的密钥",
+    ["Key System"] = "卡密系统",
+    ["Check Key"] = "检查卡密",
+    ["Get Key"] = "获取卡密",
+    ["Get Perm Key"] = "获取永久卡密",
+    ["Enter Key"] = "输入卡密",
+    ["Supported Gam"] = "支持的游戏",
+    [""] = "",
+    [""] = "",
+    [""] = "",
+    [""] = "",
+    [""] = "",
+    [""] = "",
+    [""] = "",
+    [""] = "",
+    [""] = "",
+    [""] = "",
+    [""] = "",
 }
 
-Window:SelectTab(1)
-
-Tabs.Main:Button({
-    Title = "h4x(要卡密)",
-    Desc = "汉化",
-    Callback = function()
-        pcall(function()
-            local response = loadstring(game:HttpGet("https://raw.githubusercontent.com/jbu7666gvv/h4x6/refs/heads/main/h4x%E6%B1%89%E5%8C%96"))()
-            if response and #response > 100 then
-                loadstring(response)()
-            end
-        end)
+local function translateText(text)
+    if not text or type(text) ~= "string" then return text end
+    
+    if Translations[text] then
+        return Translations[text]
     end
-})
+    
+    for en, cn in pairs(Translations) do
+        if text:find(en) then
+            return text:gsub(en, cn)
+        end
+    end
+    
+    return text
+end
+
+local function setupTranslationEngine()
+    local success, err = pcall(function()
+        local oldIndex = getrawmetatable(game).__newindex
+        setreadonly(getrawmetatable(game), false)
+        
+        getrawmetatable(game).__newindex = newcclosure(function(t, k, v)
+            if (t:IsA("TextLabel") or t:IsA("TextButton") or t:IsA("TextBox")) and k == "Text" then
+                v = translateText(tostring(v))
+            end
+            return oldIndex(t, k, v)
+        end)
+        
+        setreadonly(getrawmetatable(game), true)
+    end)
+    
+    if not success then
+        warn("元表劫持失败:", err)
+       
+        local translated = {}
+        local function scanAndTranslate()
+            for _, gui in ipairs(game:GetService("CoreGui"):GetDescendants()) do
+                if (gui:IsA("TextLabel") or gui:IsA("TextButton") or gui:IsA("TextBox")) and not translated[gui] then
+                    pcall(function()
+                        local text = gui.Text
+                        if text and text ~= "" then
+                            local translatedText = translateText(text)
+                            if translatedText ~= text then
+                                gui.Text = translatedText
+                                translated[gui] = true
+                            end
+                        end
+                    end)
+                end
+            end
+            
+            local player = game:GetService("Players").LocalPlayer
+            if player and player:FindFirstChild("PlayerGui") then
+                for _, gui in ipairs(player.PlayerGui:GetDescendants()) do
+                    if (gui:IsA("TextLabel") or gui:IsA("TextButton") or gui:IsA("TextBox")) and not translated[gui] then
+                        pcall(function()
+                            local text = gui.Text
+                            if text and text ~= "" then
+                                local translatedText = translateText(text)
+                                if translatedText ~= text then
+                                    gui.Text = translatedText
+                                    translated[gui] = true
+                                end
+                            end
+                        end)
+                    end
+                end
+            end
+        end
+        
+        local function setupDescendantListener(parent)
+            parent.DescendantAdded:Connect(function(descendant)
+                if descendant:IsA("TextLabel") or descendant:IsA("TextButton") or descendant:IsA("TextBox") then
+                    task.wait(0.1)
+                    pcall(function()
+                        local text = descendant.Text
+                        if text and text ~= "" then
+                            local translatedText = translateText(text)
+                            if translatedText ~= text then
+                                descendant.Text = translatedText
+                            end
+                        end
+                    end)
+                end
+            end)
+        end
+        
+        pcall(setupDescendantListener, game:GetService("CoreGui"))
+        local player = game:GetService("Players").LocalPlayer
+        if player and player:FindFirstChild("PlayerGui") then
+            pcall(setupDescendantListener, player.PlayerGui)
+        end
+        
+        while true do
+            scanAndTranslate()
+            task.wait(3)
+        end
+    end
+end
+
+task.wait(2)
+
+setupTranslationEngine()
+
+local success, err = pcall(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/H4xScripts/Loader/refs/heads/main/loader.lua", true))()
+
+end)
+
+if not success then
+    warn("加载失败:", err)
+end
